@@ -1,0 +1,12 @@
+- hosts: all
+  pre_tasks:
+  - name: Include Variables
+    ansible.builtin.include_vars: config.yml
+
+  roles:
+  - role: jellyfin
+
+  post_tasks:
+  - name: Ensure Pi-hole http is reachable (port 8096)
+    ansible.builtin.wait_for:
+      port: 8096

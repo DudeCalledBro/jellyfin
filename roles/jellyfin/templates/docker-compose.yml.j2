@@ -1,0 +1,32 @@
+{{ ansible_managed | comment }}
+---
+services:
+  jellyfin:
+    image: "{{ jellyfin_docker_image }}"
+    container_name: jellyfin
+    network_mode: host
+    restart: unless-stopped
+    {%- if jellyfin_docker_environment and jellyfin_docker_environment | length %}
+    environment:
+      {%- for item in jellyfin_docker_environment %}
+      - "{{ item }}"
+      {%- endfor %}
+    {%- endif %}
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "{{ jellyfin_docker_path }}/cache:/cache:rw"
+      - "{{ jellyfin_docker_path }}/config:/config:rw"
+      {%- for item in jellyfin_docker_volumes if jellyfin_docker_volumes | length %}
+      - "{{ item.name }}:{{ item.mount }}"
+      {% endfor %}
+
+{%- if jellyfin_docker_volumes | length %}
+volumes:
+  {%- for item in jellyfin_docker_volumes %}
+  {{ item.name }}:
+    {%- if item.driver_opts is defined and item.driver_opts | length %}
+    driver_opts:
+      {{ item.driver_opts | to_nice_yaml | indent(6) }}
+    {%- endif%}
+  {%- endfor %}
+{%- endif %}

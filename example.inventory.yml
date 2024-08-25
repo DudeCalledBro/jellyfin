@@ -1,0 +1,4 @@
+all:
+  hosts:
+    pihole.local:
+      ansible_user: pi

@@ -1,0 +1,12 @@
+jellyfin_docker_path: /opt/jellyfin
+jellyfin_docker_file_owner: root
+jellyfin_docker_file_group: root
+
+# jellyfin docker image
+jellyfin_docker_image: "jellyfin/jellyfin:latest"
+
+# jellyfin docker environment
+jellyfin_docker_environment: []
+
+# jellyfin docker volumes
+jellyfin_docker_volumes: []
