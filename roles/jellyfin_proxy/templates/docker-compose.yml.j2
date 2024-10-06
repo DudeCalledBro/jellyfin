@@ -1,0 +1,11 @@
+{{ ansible_managed | comment }}
+---
+services:
+  nginx:
+    image: "{{ jellyfin_proxy_docker_image }}"
+    container_name: jellyfin-proxy
+    network_mode: host
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    - "{{ jellyfin_proxy_docker_path }}/certs:/certs:ro"
+    - "{{ jellyfin_proxy_docker_path }}/default.conf:/etc/nginx/conf.d/default.conf:ro"

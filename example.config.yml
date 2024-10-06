@@ -6,3 +6,7 @@ jellyfin_docker_volumes:
     type: nfs
     o: "addr=192.168.1.2,rsize=8192,wsize=8192,timeo=14,intr,rw,hard,nfsvers=4"
     device: ":/movies"
+
+# jellyfin proxy tls certificates
+jellyfin_proxy_docker_crt: ""
+jellyfin_proxy_docker_key: ""

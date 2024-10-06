@@ -11,7 +11,9 @@ This repository contains my ansible and docker deployment for Jellyfin - an open
 
 ## Installation
 
-1. Copy the `example.inventory.yml` file to `inventory.yml` and setup as you need. Ensure you also check the role's defaults.
+1. Copy the example.inventory.yml file to inventory.yml. You also have to setup a variables file for your configuration. Therefore you have to copy example.config.yml to config.yml. Also have a look into the roles defaults.
+
+> **Important!** You have to provide a tls certificate in order to get the deployment working.
 
 2. Run the Ansible playbook to deploy Jellyfin
 

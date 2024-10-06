@@ -1,4 +1,4 @@
-- name: Create Jellyfin Directory
+- name: Create jellyfin directory
   ansible.builtin.file:
     path: "{{ jellyfin_docker_path }}"
     owner: "{{ jellyfin_docker_file_owner }}"
@@ -6,7 +6,7 @@
     state: directory
     mode: 0755
 
-- name: Create Jellyfin Docker Compose File
+- name: Create jellyfin docker compose file
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ jellyfin_docker_path }}/docker-compose.yml"
@@ -16,13 +16,13 @@
     mode: 0644
   notify: restart jellyfin
 
-- name: Validate Docker Compose File
+- name: Validate docker compose file
   ansible.builtin.command: docker compose config --quiet
   args:
     chdir: "{{ jellyfin_docker_path }}"
   changed_when: false
 
-- name: Startup Container
+- name: Startup container
   ansible.builtin.command: >-
     docker compose --ansi never --progress plain up --detach
   args:

@@ -4,7 +4,6 @@ services:
   jellyfin:
     image: "{{ jellyfin_docker_image }}"
     container_name: jellyfin
-    network_mode: host
     restart: unless-stopped
     {%- if jellyfin_docker_environment and jellyfin_docker_environment | length %}
     environment:
@@ -12,6 +11,11 @@ services:
       - "{{ item }}"
       {%- endfor %}
     {%- endif %}
+    ports:
+    - "127.0.0.1:8096:8096"
+    - "127.0.0.1:8020:8020"
+    - "1900:1900/udp"
+    - "7359:7359/udp"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "{{ jellyfin_docker_path }}/cache:/cache:rw"

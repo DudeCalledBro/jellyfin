@@ -1,0 +1,61 @@
+- name: Create jellyfin proxy directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ jellyfin_proxy_docker_file_owner }}"
+    group: "{{ jellyfin_proxy_docker_file_group }}"
+    state: directory
+    mode: 0755
+  loop:
+  - "{{ jellyfin_proxy_docker_path }}"
+  - "{{ jellyfin_proxy_docker_path }}/certs"
+
+- name: Create jellyfin proxy certificate
+  ansible.builtin.copy:
+    content: "{{ jellyfin_proxy_docker_crt }}"
+    dest: "{{ jellyfin_proxy_docker_path }}/certs/tls.crt"
+    owner: "{{ jellyfin_proxy_docker_file_owner }}"
+    group: "{{ jellyfin_proxy_docker_file_group }}"
+    mode: 0644
+  notify: restart jellyfin proxy
+
+- name: Create jellyfin proxy certificate key
+  ansible.builtin.copy:
+    content: "{{ jellyfin_proxy_docker_key }}"
+    dest: "{{ jellyfin_proxy_docker_path }}/certs/tls.key"
+    owner: "{{ jellyfin_proxy_docker_file_owner }}"
+    group: "{{ jellyfin_proxy_docker_file_group }}"
+    mode: 0644
+  notify: restart jellyfin proxy
+
+- name: Create jellyfin proxy config
+  ansible.builtin.template:
+    src: default.conf.j2
+    dest: "{{ jellyfin_proxy_docker_path }}/default.conf"
+    owner: "{{ jellyfin_proxy_docker_file_owner }}"
+    group: "{{ jellyfin_proxy_docker_file_group }}"
+    mode: 0644
+  notify: restart jellyfin proxy
+
+- name: Create jellyfin proxy docker compose deployment
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ jellyfin_proxy_docker_path }}/docker-compose.yml"
+    owner: "{{ jellyfin_proxy_docker_file_owner }}"
+    group: "{{ jellyfin_proxy_docker_file_group }}"
+    trim_blocks: false
+    mode: 0644
+  notify: restart jellyfin proxy
+
+- name: Validate jellyfin proxy docker compose file
+  ansible.builtin.command: docker compose config --quiet
+  args:
+    chdir: "{{ jellyfin_proxy_docker_path }}"
+  changed_when: false
+
+- name: Startup jellyfin proxy container
+  ansible.builtin.command: >-
+    docker compose --ansi never --progress plain up --detach
+  args:
+    chdir: "{{ jellyfin_proxy_docker_path }}"
+  register: jellyfin_proxy_container_startup
+  changed_when: "'Started' in jellyfin_proxy_container_startup.stdout"

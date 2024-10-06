@@ -1,0 +1,10 @@
+jellyfin_proxy_docker_path: /opt/jellyfin_proxy
+jellyfin_proxy_docker_file_owner: root
+jellyfin_proxy_docker_file_group: root
+
+# jellyfin proxy docker image (nginx)
+jellyfin_proxy_docker_image: "nginx:alpine"
+
+# jellyfin proxy tls certificates
+jellyfin_proxy_docker_crt: ""
+jellyfin_proxy_docker_key: ""

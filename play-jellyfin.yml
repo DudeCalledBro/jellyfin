@@ -5,8 +5,4 @@
 
   roles:
   - role: jellyfin
-
-  post_tasks:
-  - name: Ensure Jellyfin http is reachable (port 8096)
-    ansible.builtin.wait_for:
-      port: 8096
+  - role: jellyfin_proxy

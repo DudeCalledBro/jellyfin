@@ -1,0 +1,30 @@
+argument_specs:
+  main:
+    short_description: jellyfin_proxy
+    description: "Setup NGINX reverse proxy for Jellyfin."
+    author: dudecalledbro
+    options:
+      jellyfin_proxy_docker_path:
+        type: str
+        required: true
+        description: "Set jellyfin proxy deployment path."
+      jellyfin_proxy_docker_file_owner:
+        type: str
+        required: true
+        description: "Set jellyfin proxy deployment owner."
+      jellyfin_proxy_docker_file_group:
+        type: str
+        required: true
+        description: "Set jellyfin proxy deployment group."
+      jellyfin_proxy_docker_image:
+        type: str
+        required: true
+        description: "Set jellyfin proxy (nginx) docker image."
+      jellyfin_proxy_docker_crt:
+        type: str
+        required: true
+        description: "Set jellyfin proxy tls certificate."
+      jellyfin_proxy_docker_key:
+        type: str
+        required: true
+        description: "Set jellyfin proxy tls certificate key."

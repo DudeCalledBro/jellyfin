@@ -1,0 +1,7 @@
+- name: Restart jellyfin proxy container
+  ansible.builtin.command: >-
+    docker compose --ansi never --progress plain restart
+  args:
+    chdir: "{{ jellyfin_proxy_docker_path }}"
+  changed_when: true
+  listen: restart jellyfin proxy
