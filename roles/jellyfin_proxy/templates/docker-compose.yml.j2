@@ -4,6 +4,7 @@ services:
   nginx:
     image: "{{ jellyfin_proxy_docker_image }}"
     container_name: jellyfin-proxy
+    restart: unless-stopped
     network_mode: host
     volumes:
     - "/etc/localtime:/etc/localtime:ro"
