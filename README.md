@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/DudeCalledBro/jellyfin/actions/workflows/ci.yml/badge.svg)](https://github.com/DudeCalledBro/jellyfin/actions/workflows/ci.yml)
 
-This repository contains my ansible and docker deployment for Jellyfin - an open-source media server.
+This repository contains the Ansible code for deploying Jellyfin using Docker.
 
 ## Prerequisites
 
@@ -22,6 +22,20 @@ This repository contains my ansible and docker deployment for Jellyfin - an open
     ```
 
 > You may have to enter a password to SSH into the target system, so you need to add `-k` after the `ansible-playbook` command.
+
+## Watchtower
+
+Watchtower is a Docker container application that automates the process of updating other Docker containers. It monitors running containers and checks for changes to their base images. When Watchtower detects that a new version of an image has been pushed to a Docker registry, it performs the following actions:
+
+- Pulls the updated image
+- Gracefully shuts down the existing container
+- Restarts the container using the new image with the same runtime options
+
+> **Side Note!** I use Watchtower for effortless updates on my systems, as I often overlook Jellyfin updates. The installation is optional.
+
+```bash
+ansible-playbook play-watchtower.yml
+```
 
 ## License
 

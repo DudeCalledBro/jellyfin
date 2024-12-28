@@ -1,0 +1,16 @@
+{{ ansible_managed | comment }}
+---
+services:
+  watchtower:
+    image: "{{ watchtower_docker_image }}"
+    container_name: watchtower
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
+    command: "{{ watchtower_docker_command }}"
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"

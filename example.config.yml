@@ -10,3 +10,6 @@ jellyfin_docker_volumes:
 # jellyfin proxy tls certificates
 jellyfin_proxy_docker_crt: ""
 jellyfin_proxy_docker_key: ""
+
+# watchtower configuration
+watchtower_docker_command: "--debug --cleanup --schedule '0 30 4 * * *'"
