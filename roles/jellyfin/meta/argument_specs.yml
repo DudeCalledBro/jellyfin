@@ -21,8 +21,7 @@ argument_specs:
         required: true
         description: "Set jellyfin docker image."
       jellyfin_docker_environment:
-        type: list
-        elements: dict
+        type: dict
         required: false
         description: "Set jellyfin docker environment."
       jellyfin_docker_volumes:

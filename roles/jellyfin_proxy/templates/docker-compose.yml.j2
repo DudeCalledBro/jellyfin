@@ -5,6 +5,11 @@ services:
     image: "{{ jellyfin_proxy_docker_image }}"
     container_name: jellyfin-proxy
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
     network_mode: host
     volumes:
     - "/etc/localtime:/etc/localtime:ro"

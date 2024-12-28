@@ -6,6 +6,11 @@ services:
     hostname: "{{ jellyfin_vue_docker_hostname }}"
     container_name: jellyfin-vue
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
     ports:
     - "{{ jellyfin_vue_docker_host }}:{{ jellyfin_vue_docker_port }}:80"
     {%- if jellyfin_vue_docker_env | length %}

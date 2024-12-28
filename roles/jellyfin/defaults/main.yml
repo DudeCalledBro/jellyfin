@@ -5,8 +5,11 @@ jellyfin_docker_file_group: root
 # jellyfin docker image
 jellyfin_docker_image: "jellyfin/jellyfin:latest"
 
+# Specifies the jellyfin container hostname.
+jellyfin_docker_hostname: jellyfin
+
 # jellyfin docker environment
-jellyfin_docker_environment: []
+jellyfin_docker_environment: {}
 
 # jellyfin docker volumes
 jellyfin_docker_volumes: []

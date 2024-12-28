@@ -3,13 +3,19 @@
 services:
   jellyfin:
     image: "{{ jellyfin_docker_image }}"
+    hostname: "{{ jellyfin_docker_hostname }}"
     container_name: jellyfin
     restart: unless-stopped
-    {%- if jellyfin_docker_environment and jellyfin_docker_environment | length %}
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
+    {%- if jellyfin_docker_environment | length %}
     environment:
-      {%- for item in jellyfin_docker_environment %}
-      - "{{ item }}"
-      {%- endfor %}
+    {%- for item in jellyfin_docker_environment %}
+      {{ item.key }}: "{{ item.value }}"
+    {%- endfor %}
     {%- endif %}
     ports:
     - "127.0.0.1:8096:8096"
