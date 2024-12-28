@@ -1,0 +1,3 @@
+repository:
+  description: "Ansible playbooks to automate the deployment of Jellyfin media server."
+  topics: ansible, automation, docker-compose, jellyfin
