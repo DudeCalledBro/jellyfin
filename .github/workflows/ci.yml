@@ -1,12 +1,12 @@
 name: Lint
 
-on:
+'on':
   pull_request:
   push:
     branches:
     - main
   schedule:
-  - cron: "0 22 * * 0"
+  - cron: "3 2 * * 0"
 
 jobs:
   lint:
@@ -20,9 +20,9 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Insatll Python3 Requirements
-      run: pip3 install yamllint
+    - name: Install Dependencies
+      run: pip3 install -r requirements.txt
 
     - name: Lint YAML
       run: |
-        yamllint -c .yamllint .
+        yamllint .

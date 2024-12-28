@@ -1,2 +1,9 @@
 inventory.yml
 config.yml
+
+# ignore common
+.DS_Store
+*.retry
+*/__pycache__
+*.pyc
+.cache

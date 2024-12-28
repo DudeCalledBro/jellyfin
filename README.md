@@ -23,6 +23,16 @@ This repository contains the Ansible code for deploying Jellyfin using Docker.
 
 > You may have to enter a password to SSH into the target system, so you need to add `-k` after the `ansible-playbook` command.
 
+## Jellyfin Vue (Unstable)
+
+Jellyfin Vue is an experimental web client for the Jellyfin media server. It's important to note that Jellyfin Vue is currently unstable and not fully developed, meaning users should proceed with caution. 
+
+The project is still in its early stages, lacking stable releases and may contain bugs or incomplete features. Therefore, use Jellyfin Vue at your own risk, as it may lead to unexpected behavior or data issues on your server. Regular backups are recommended if you choose to test this client.
+
+```bash
+ansible-playbook play-jellyfin-vue.yml
+```
+
 ## Watchtower
 
 Watchtower is a Docker container application that automates the process of updating other Docker containers. It monitors running containers and checks for changes to their base images. When Watchtower detects that a new version of an image has been pushed to a Docker registry, it performs the following actions:

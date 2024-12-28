@@ -10,7 +10,3 @@ rules:
   line-length:
     max: 200
     level: warning
-
-# Ignore CI
-ignore: |
-  .github/*
