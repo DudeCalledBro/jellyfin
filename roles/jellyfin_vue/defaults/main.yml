@@ -1,0 +1,18 @@
+# Specifies the jellyfin vue docker image to be used.
+jellyfin_vue_docker_image: "jellyfin/jellyfin-vue:unstable"
+
+# Specifies the jellyfin vue path, owner and group.
+jellyfin_vue_docker_path: /opt/jellyfin_vue
+jellyfin_vue_docker_owner: root
+jellyfin_vue_docker_group: root
+
+# Specifies the jellyfin vue container hostname.
+jellyfin_vue_docker_hostname: jellyfin
+
+# Specifies the ip address and port to be used for jellyfin vue.
+jellyfin_vue_docker_host: 127.0.0.1
+jellyfin_vue_docker_port: 8080
+
+# Define environment variables for the jellyfin vue container.
+# https://github.com/jellyfin/jellyfin-vue/wiki/Configuration#docker-based-setups
+jellyfin_vue_docker_env: {}

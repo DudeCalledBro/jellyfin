@@ -1,0 +1,31 @@
+- name: Create jellyfin vue directory
+  ansible.builtin.file:
+    path: "{{ jellyfin_vue_docker_path }}"
+    owner: "{{ jellyfin_vue_docker_owner }}"
+    group: "{{ jellyfin_vue_docker_group }}"
+    state: directory
+    mode: 0755
+
+- name: Create jellyfin vue docker compose deployment
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ jellyfin_vue_docker_path }}/docker-compose.yml"
+    owner: "{{ jellyfin_vue_docker_owner }}"
+    group: "{{ jellyfin_vue_docker_group }}"
+    trim_blocks: false
+    mode: 0644
+  notify: restart jellyfin vue
+
+- name: Validate jellyfin vue docker compose deployment
+  ansible.builtin.command: docker compose config --quiet
+  args:
+    chdir: "{{ jellyfin_vue_docker_path }}"
+  changed_when: false
+
+- name: Startup jellyfin vue docker compose deployment
+  ansible.builtin.command: >-
+    docker compose --ansi never --progress plain up --detach
+  args:
+    chdir: "{{ jellyfin_vue_docker_path }}"
+  register: jellyfin_vue_container_startup
+  changed_when: "'Started' in jellyfin_vue_container_startup.stdout"

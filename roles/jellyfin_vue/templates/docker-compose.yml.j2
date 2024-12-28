@@ -1,0 +1,18 @@
+{{ ansible_managed | comment }}
+---
+services:
+  jellyfin_vue:
+    image: "{{ jellyfin_vue_docker_image }}"
+    hostname: "{{ jellyfin_vue_docker_hostname }}"
+    container_name: jellyfin-vue
+    restart: unless-stopped
+    ports:
+    - "{{ jellyfin_vue_docker_host }}:{{ jellyfin_vue_docker_port }}:80"
+    {%- if jellyfin_vue_docker_env | length %}
+    environment:
+    {%- for item in (jellyfin_vue_docker_env | dict2items) %}
+      {{ item.key }}: "{{ item.value }}"
+    {%- endfor %}
+    {%- endif %}
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
