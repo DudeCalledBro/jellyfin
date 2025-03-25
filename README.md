@@ -8,44 +8,41 @@ This repository contains the Ansible code for deploying Jellyfin using Docker.
 
 - Ensure you have Ansible installed (e.g. `pip3 install ansible`)
 - Ensure Docker is installed on the Jellyfin server (you may want to checkout my [ansible-docker-role](https://github.com/DudeCalledBro/ansible-role-docker))
+- **Optional**: Set up a reverse proxy for your Jellyfin instance (you may want to checkout my [traefik-deployment](https://github.com/DudeCalledBro/traefik-ansible))
 
 ## Installation
 
-1. Copy the example.inventory.yml file to inventory.yml. You also have to setup a variables file for your configuration. Therefore you have to copy example.config.yml to config.yml. Also have a look into the roles defaults.
+1. Copy the example.inventory.yml file to inventory.yml. You also have to setup a variables file for your configuration. Therefore you have to copy example.config.yml to config.yml.
 
-> **Important!** You have to provide a tls certificate in order to get the deployment working.
+2. Configure the setup (config.yml), such as the Traefik reverse proxy.
 
-2. Run the Ansible playbook to deploy Jellyfin
+    ```yaml
+    # Docker Compose override configuration for Jellyfin container
+    jellyfin_docker_override:
+      services:
+        jellyfin:
+          labels:
+            - traefik.enable=true
+            - traefik.http.routers.jellyfin.rule=Host(`jellyfin.local`)
+            - traefik.http.routers.jellyfin.entrypoints=websecure
+            - traefik.http.routers.jellyfin.tls=true
+            - traefik.http.services.jellyfin.loadBalancer.server.port=8096
+          networks:
+            - traefik
+    
+      # Custom networking in your docker compose override
+      networks:
+        traefik:
+          name: traefik
+    ```
+
+3. Run the Ansible playbook to deploy Jellyfin
 
     ```bash
-    ansible-playbook play-jellyfin.yml
+    ansible-playbook main.yml
     ```
 
 > You may have to enter a password to SSH into the target system, so you need to add `-k` after the `ansible-playbook` command.
-
-## Jellyfin Vue (Unstable)
-
-Jellyfin Vue is an experimental web client for the Jellyfin media server. It's important to note that Jellyfin Vue is currently unstable and not fully developed, meaning users should proceed with caution. 
-
-The project is still in its early stages, lacking stable releases and may contain bugs or incomplete features. Therefore, use Jellyfin Vue at your own risk, as it may lead to unexpected behavior or data issues on your server. Regular backups are recommended if you choose to test this client.
-
-```bash
-ansible-playbook play-jellyfin-vue.yml
-```
-
-## Watchtower
-
-Watchtower is a Docker container application that automates the process of updating other Docker containers. It monitors running containers and checks for changes to their base images. When Watchtower detects that a new version of an image has been pushed to a Docker registry, it performs the following actions:
-
-- Pulls the updated image
-- Gracefully shuts down the existing container
-- Restarts the container using the new image with the same runtime options
-
-> **Side Note!** I use Watchtower for effortless updates on my systems, as I often overlook Jellyfin updates. The installation is optional.
-
-```bash
-ansible-playbook play-watchtower.yml
-```
 
 ## License
 

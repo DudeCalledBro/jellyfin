@@ -1,0 +1,79 @@
+---
+- name: Setup Jellyfin
+  hosts: all
+  gather_facts: false
+
+  vars_files:
+    - config.yml
+
+  tasks:
+    - name: Install required packages
+      ansible.builtin.package:
+        name:
+          - cifs-utils
+          - nfs-common
+        state: present
+
+    - name: Create jellyfin directory
+      ansible.builtin.file:
+        path: "{{ jellyfin_docker_path }}"
+        owner: "{{ jellyfin_docker_owner }}"
+        group: "{{ jellyfin_docker_group }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create jellyfin movies share directory
+      ansible.builtin.file:
+        path: "{{ jellyfin_docker_path }}/movies"
+        state: directory
+        mode: '0755'
+
+    - name: Mount jellyfin movies share
+      ansible.posix.mount:
+        src: "{{ jellyfin_docker_mount_src }}"
+        path: "{{ jellyfin_docker_path }}/movies"
+        opts: "{{ jellyfin_docker_mount_opts }}"
+        state: mounted
+        fstype: nfs
+      when:
+        - jellyfin_docker_mount_src | length
+        - jellyfin_docker_mount_opts | length
+
+    - name: Manage jellyfin docker compose deployment
+      ansible.builtin.template:
+        src: compose.yaml.j2
+        dest: "{{ jellyfin_docker_path }}/compose.yaml"
+        owner: "{{ jellyfin_docker_owner }}"
+        group: "{{ jellyfin_docker_group }}"
+        mode: '0644'
+      notify: restart jellyfin
+
+    - name: Manage jellyfin docker compose override
+      ansible.builtin.copy:
+        content: "{{ jellyfin_docker_override | to_nice_yaml(indent=2) }}"
+        dest: "{{ jellyfin_docker_path }}/compose.override.yaml"
+        owner: "{{ jellyfin_docker_owner }}"
+        group: "{{ jellyfin_docker_group }}"
+        mode: '0644'
+      notify: restart jellyfin
+
+    - name: Validate jellyfin docker compose deployment
+      ansible.builtin.command:
+        cmd: docker compose config --quiet
+        chdir: "{{ jellyfin_docker_path }}"
+      changed_when: false
+
+    - name: Startup jellyfin docker compose deployment
+      ansible.builtin.command:
+        cmd: docker compose --ansi never --progress plain up --detach
+        chdir: "{{ jellyfin_docker_path }}"
+      register: _container_startup
+      changed_when: "'Started' in _container_startup.stdout"
+
+  handlers:
+    - name: Restart jellyfin docker compose deployment
+      ansible.builtin.command:
+        cmd: docker compose --ansi never --progress plain restart
+        chdir: "{{ jellyfin_docker_path }}"
+      changed_when: true
+      listen: restart jellyfin

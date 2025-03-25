@@ -1,7 +1,0 @@
-- name: Restart watchtower container
-  ansible.builtin.command: >-
-    docker compose --ansi never --progress plain restart
-  args:
-    chdir: "{{ watchtower_docker_path }}"
-  changed_when: true
-  listen: restart watchtower

@@ -1,15 +1,24 @@
-# example nfs configuration
-jellyfin_docker_volumes:
-- name: movies
-  mount: /movies
-  driver_opts:
-    type: nfs
-    o: "addr=192.168.1.2,rsize=8192,wsize=8192,timeo=14,intr,rw,hard,nfsvers=4"
-    device: ":/movies"
+---
+jellyfin_docker_path: /opt/jellyfin
+jellyfin_docker_owner: root
+jellyfin_docker_group: root
 
-# jellyfin proxy tls certificates
-jellyfin_proxy_docker_crt: ""
-jellyfin_proxy_docker_key: ""
+# The Docker image to use for Jellyfin (latest version)
+jellyfin_docker_image: jellyfin/jellyfin:latest
 
-# watchtower configuration
-watchtower_docker_command: "--debug --cleanup --schedule '0 30 4 * * *'"
+# Path to the NFS share for Jellyfin Movies (leave empty if not using NFS)
+# Uncomment and set a valid NFS share path if needed
+jellyfin_docker_mount_src: ""
+# jellyfin_docker_mount_src: nas-01.local:/movies
+
+# Options for mounting the Jellyfin Movies NFS share
+# Modify these NFS options as per your server’s setup
+# Uncomment and adjust the options as needed (e.g., rsize, timeouts)
+jellyfin_docker_mount_opts: ""
+# jellyfin_docker_mount_opts: rsize=8192,wsize=8192,timeo=14,intr,rw,hard
+
+# Docker Compose override configuration for Jellyfin container
+jellyfin_docker_override:
+  services:
+    jellyfin:
+      network_mode: host
