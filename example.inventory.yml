@@ -3,3 +3,4 @@ all:
   hosts:
     jellyfin.local:
       ansible_user: pi
+      ansible_become: true
